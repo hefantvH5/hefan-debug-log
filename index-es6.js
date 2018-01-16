@@ -125,7 +125,7 @@ class Log {
                         msg: errorObj
                     }
                 }
-                _this._debugHandler('error', scriptURI, errorInfo)
+                _this._debugHandler('error', scriptURI, this._formatMsg('error', errorInfo))
             }
         }
     }
