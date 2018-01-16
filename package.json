@@ -1,6 +1,6 @@
 {
-    "name": "hefan-debug-log",
-    "version": "0.0.36",
+    "name": "hefan-log",
+    "version": "0.0.02",
     "description": "hefan debug console.log",
     "main": "index.js",
     "scripts": {
@@ -8,7 +8,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/guozongwei/hefan-debug-log.git"
+        "url": "git@github.com:hefantvH5/hefan-debug-log.git"
     },
     "keywords": [
         "hefan",
@@ -19,14 +19,11 @@
     "author": "515238108@qq.com",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/guozongwei/hefan-debug-log/issues"
+        "url": "https://github.com/hefantvH5/hefan-debug-log/issues"
     },
-    "homepage": "https://github.com/guozongwei/hefan-debug-log#readme",
+    "homepage": "https://github.com/hefantvH5/hefan-debug-log",
     "devDependencies": {
-        "babel-preset-latest": "^6.24.1",
-        "babel-preset-stage-2": "^6.24.1"
     },
     "dependencies": {
-        "babel-polyfill": "^6.23.0"
     }
 }
