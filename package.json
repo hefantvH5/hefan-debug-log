@@ -1,6 +1,6 @@
 {
     "name": "hefan-log",
-    "version": "0.0.06",
+    "version": "0.0.07",
     "description": "hefan debug console.log",
     "main": "index.js",
     "scripts": {

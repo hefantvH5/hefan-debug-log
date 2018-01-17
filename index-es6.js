@@ -78,7 +78,7 @@ class Log {
             const fn = window.console[type];
             if (fn) {
                 fn.apply(window.console, this._formatMsg(type, msg));
-                this._debugHandler(type, pageName, this._formatMsg(type, msg))
+                this._debugHandler(type, pageName, msg)
             }
         }
     }
