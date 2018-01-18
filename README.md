@@ -43,9 +43,9 @@ Log.config(projectName, env,level)
 
 //env：配置的环境应是['development', 'testing', 'preproduction', 'production']中存在的，否则无法展示,默认为当前进程环境
 
-//level 配置的level应是 ['debug', 'log', 'info', 'warn', 'error']中存在的  debug级别最低，error最高。此字段代表只输出高于所设级别的log，
+//level 配置的level应是 ['debug', 'log', 'info', 'warn', 'error']中存在的  debug级别最低，error最高。
 
-//例如设置为log级，那么Log.debug()则不会被输出
+//此字段代表只输出高于所设级别的log，例如设置为log级，那么Log.debug()则不会被输出
 
 //配置例子
 
