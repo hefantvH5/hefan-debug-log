@@ -17,8 +17,8 @@ class Log {
         return instance
     }
 
-    config({ projectName = '', env = process.env.NODE_ENV, level = 'debug' } = {}) {
-        this.projectName = projectName || typeof _PROJECTNAME !== 'undefined' && _PROJECTNAME ? _PROJECTNAME : '项目名称未配置';
+    config({ projectName = typeof _PROJECTNAME !== 'undefined' && _PROJECTNAME ? _PROJECTNAME : '项目名称未配置', env = process.env.NODE_ENV, level = 'debug' } = {}) {
+        this.projectName = projectName;
         this.enable = true;
         this.typeArray = ['debug', 'log', 'info', 'warn', 'error'];
         let envIndex = this.envArray.indexOf(env);
