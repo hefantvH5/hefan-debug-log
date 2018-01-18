@@ -1,6 +1,10 @@
-# hefan-debug-log
+# hefan-log
+
 hefan debug console.log
+
 # 说明
+
+> 最新版本为v0.0.09
 
 >  盒饭TV内部使用
 
@@ -11,6 +15,7 @@ hefan debug console.log
 
 
 ## 项目使用（nodejs 6.0+）
+
 ``` bash
 
 # 安装
