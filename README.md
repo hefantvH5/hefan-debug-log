@@ -45,7 +45,7 @@ Log.config(projectName, env,level)
 
 //level 配置的level应是 ['debug', 'log', 'info', 'warn', 'error']中存在的  debug级别最低，error最高。此字段代表只输出高于所设级别的log，
 
-例如设置为log级，那么Log.debug()则不会被输出
+//例如设置为log级，那么Log.debug()则不会被输出
 
 //配置例子
 
