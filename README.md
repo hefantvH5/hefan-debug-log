@@ -39,15 +39,15 @@ plugins: [
 
 Log.config(projectName, env,level)
 
-//projectName：项目名称，若webpack中设置了相应全局变量_PROJECTNAME，则取_PROJECTNAME。默认为'项目名称未配置'.
+// projectName：项目名称，若webpack中设置了相应全局变量_PROJECTNAME，则取_PROJECTNAME。默认为'项目名称未配置'.
 
-//env：配置的环境应是['development', 'testing', 'preproduction', 'production']中存在的，否则无法展示,默认为当前进程环境
+// env：配置的环境应是['development', 'testing', 'preproduction', 'production']中存在的，否则无法展示,默认为当前进程环境
 
-//level 配置的level应是 ['debug', 'log', 'info', 'warn', 'error']中存在的  debug级别最低，error最高。
+// level 配置的level应是 ['debug', 'log', 'info', 'warn', 'error']中存在的  debug级别最低，error最高。
 
-//此字段代表只输出高于所设级别的log，例如设置为log级，那么Log.debug()则不会被输出
+// 此字段代表只输出高于所设级别的log，例如设置为log级，那么Log.debug()则不会被输出
 
-//配置例子
+// 配置例子
 
 Log.config('测试项目', 'development'，'log')
 
