@@ -102,30 +102,77 @@ class Log {
     _jsErrorHandler() {
         let _this = this;
         if (typeof window !== 'undefined' && !window.onerror) {
+
             window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, errorObj) {
-                let errorInfo = {
-                    errorMessage: {
-                        meaning: '错误信息：',
-                        msg: errorMessage
-                    },
-                    scriptURI: {
-                        meaning: '出错文件：',
-                        msg: scriptURI
-                    },
-                    lineNumber: {
-                        meaning: '出错行号：',
-                        msg: lineNumber
-                    },
-                    columnNumber: {
-                        meaning: '出错列号：',
-                        msg: columnNumber
-                    },
-                    errorObj: {
-                        meaning: '错误详情：',
-                        msg: errorObj
+                let message = {};
+                let htmlURI = window.location.host + window.location.pathname;
+
+                try {
+                    let {
+                        appCodeName,
+                        appName,
+                        appVersion,
+                        cookieEnabled,
+                        languages,
+                        onLine,
+                        platform,
+                        product,
+                        productSub,
+                        userAgent,
+                        vendor
+                    } = window.navigator, userNavigator;
+
+                    userNavigator = {
+                        appCodeName,
+                        appName,
+                        appVersion,
+                        cookieEnabled,
+                        languages,
+                        onLine,
+                        platform,
+                        product,
+                        productSub,
+                        userAgent,
+                        vendor
                     }
+                    if (typeof errorMessage === "object" && errorMessage.toString() === "[object Event]") {
+                        for (key in errorMessage) {
+                            message += `${key}:${errorMessage[key]},`
+                        }
+                    } else {
+                        message = errorMessage
+                    }
+                    let errorInfo = {
+                        mobileInfo: {
+                            meaning: '浏览器信息：',
+                            msg: userNavigator
+                        },
+                        errorMessage: {
+                            meaning: '错误信息：',
+                            msg: message
+                        },
+                        scriptURI: {
+                            meaning: '出错文件：',
+                            msg: scriptURI
+                        },
+                        lineNumber: {
+                            meaning: '出错行号：',
+                            msg: lineNumber
+                        },
+                        columnNumber: {
+                            meaning: '出错列号：',
+                            msg: columnNumber
+                        },
+                        errorObj: {
+                            meaning: '错误详情：',
+                            msg: errorObj
+                        }
+                    }
+                    _this._debugHandler('error', htmlURI, errorInfo)
+                } catch (err) {
+
                 }
-                _this._debugHandler('error', scriptURI, errorInfo)
+
             }
         }
     }
