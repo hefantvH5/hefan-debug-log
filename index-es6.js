@@ -93,6 +93,7 @@ class Log {
     _paramFormat(data) {
         let result = {};
         result.data = JSON.stringify(data);
+        result.data = encodeURIComponent(result.data)
         return result;
     }
     _formatMsg(type, msg) {
