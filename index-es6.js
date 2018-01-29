@@ -10,6 +10,7 @@ class Log {
         if (!created) {
             created = true;
             this._jsErrorHandler()
+            this._jsGetClientIP()
             instance = new Log();
         }
         this.config()
@@ -82,8 +83,11 @@ class Log {
             }
         }
     }
+    
     _debugHandler(type, pageName, data) {
-        let imgData = this._paramFormat({ "projectName": this.projectName, "type": type, env: this.env, "action": "4001", "pageName": pageName, "logData": data });
+        let imgData = this._paramFormat({ "projectName": this.projectName, "type": type, 
+            env: this.env, "action": "4001", "pageName": pageName, "logData": data,
+            ipInfo: window.returnCitySN || {} });
         this._ajax('http://debug.hefantv.com/api/postDebug', imgData);
     }
     _getTime() {
@@ -176,6 +180,14 @@ class Log {
 
             }
         }
+    }
+
+    _jsGetClientIP(){
+        let eleHeader = document.getElementsByTagName('HEAD').item(0)
+        let eleScript= document.createElement("script") 
+        eleScript.type = "text/javascript"
+        eleScript.src="http://h5api.hefantv.com/api/ipaddress?format=js" 
+        eleHeader.appendChild( eleScript)
     }
 }
 

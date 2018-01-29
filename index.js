@@ -1,1 +1,255 @@
-'use strict';var _typeof='function'==typeof Symbol&&'symbol'==typeof Symbol.iterator?function(a){return typeof a}:function(a){return a&&'function'==typeof Symbol&&a.constructor===Symbol&&a!==Symbol.prototype?'symbol':typeof a},_createClass=function(){function a(b,c){for(var f,e=0;e<c.length;e++)f=c[e],f.enumerable=f.enumerable||!1,f.configurable=!0,'value'in f&&(f.writable=!0),Object.defineProperty(b,f.key,f)}return function(b,c,e){return c&&a(b.prototype,c),e&&a(b,e),b}}();function _classCallCheck(a,b){if(!(a instanceof b))throw new TypeError('Cannot call a class as a function')}var created=!1,instance=null,Log=function(){function a(){return _classCallCheck(this,a),this.envArray=['development','testing','preproduction','production'],created||(created=!0,this._jsErrorHandler(),instance=new a),this.config(),instance}return _createClass(a,[{key:'config',value:function config(){var _ref=0<arguments.length&&void 0!==arguments[0]?arguments[0]:{},_ref$projectName=_ref.projectName,o=void 0===_ref$projectName?'undefined'!=typeof _PROJECTNAME&&_PROJECTNAME?_PROJECTNAME:'\u9879\u76EE\u540D\u79F0\u672A\u914D\u7F6E':_ref$projectName,_ref$env=_ref.env,p=void 0===_ref$env?process.env.NODE_ENV:_ref$env,_ref$level=_ref.level,q=void 0===_ref$level?'debug':_ref$level;this.projectName=o,this.enable=!0,this.typeArray=['debug','log','info','warn','error'];var r=this.envArray.indexOf(p);-1<r?this.env=p:this.enable=!1;var s=this.typeArray.indexOf(q);-1<s&&(this.typeArray=this.typeArray.splice(s))}},{key:'debug',value:function debug(o){for(var q=arguments.length,p=Array(1<q?q-1:0),r=1;r<q;r++)p[r-1]=arguments[r];this._consolePrint('debug',o,p)}},{key:'log',value:function log(o){for(var q=arguments.length,p=Array(1<q?q-1:0),r=1;r<q;r++)p[r-1]=arguments[r];this._consolePrint('log',o,p)}},{key:'info',value:function info(o){for(var q=arguments.length,p=Array(1<q?q-1:0),r=1;r<q;r++)p[r-1]=arguments[r];this._consolePrint('info',o,p)}},{key:'warn',value:function warn(o){for(var q=arguments.length,p=Array(1<q?q-1:0),r=1;r<q;r++)p[r-1]=arguments[r];this._consolePrint('warn',o,p)}},{key:'error',value:function error(o){for(var q=arguments.length,p=Array(1<q?q-1:0),r=1;r<q;r++)p[r-1]=arguments[r];this._consolePrint('error',o,p)}},{key:'_ajax',value:function _ajax(o,p){var q=null;q=window.XMLHttpRequest?new XMLHttpRequest:new ActiveXObject('Microsoft.XMLHTTP');Math.random();if('object'==('undefined'==typeof p?'undefined':_typeof(p))){var s='';for(var t in p)s+=t+'='+p[t]+'&';p=s.replace(/&$/,'')}q.open('POST',o,!0),q.setRequestHeader('Content-type','application/x-www-form-urlencoded'),q.send(p)}},{key:'_consolePrint',value:function _consolePrint(o,p,q){if(this.enable&&-1<this.typeArray.indexOf(o)){var r=window.console[o];r&&(r.apply(window.console,this._formatMsg(o,q)),this._debugHandler(o,p,q))}}},{key:'_debugHandler',value:function _debugHandler(o,p,q){var r=this._paramFormat({projectName:this.projectName,type:o,env:this.env,action:'4001',pageName:p,logData:q});this._ajax('http://debug.hefantv.com/api/postDebug',r)}},{key:'_getTime',value:function _getTime(){var o=new Date;return o.getHours()+':'+(o.getMinutes()+':')+(o.getSeconds()+'')}},{key:'_paramFormat',value:function _paramFormat(o){var p={};return p.data=JSON.stringify(o),p.data=encodeURIComponent(p.data),p}},{key:'_formatMsg',value:function _formatMsg(o,p){return p.unshift(this._getTime()+' ['+o+'] > '),p}},{key:'_jsErrorHandler',value:function _jsErrorHandler(){var o=this;'undefined'==typeof window||window.onerror||(window.onerror=function(p,q,r,s,t){var u={},v=window.location.host+window.location.pathname;try{var _window$navigator=window.navigator,w=_window$navigator.appCodeName,x=_window$navigator.appName,y=_window$navigator.appVersion,z=_window$navigator.cookieEnabled,A=_window$navigator.languages,B=_window$navigator.onLine,C=_window$navigator.platform,D=_window$navigator.product,E=_window$navigator.productSub,F=_window$navigator.userAgent,G=_window$navigator.vendor,H=void 0;if(H={appCodeName:w,appName:x,appVersion:y,cookieEnabled:z,languages:A,onLine:B,platform:C,product:D,productSub:E,userAgent:F,vendor:G},'object'===('undefined'==typeof p?'undefined':_typeof(p))&&'[object Event]'===p.toString())for(key in p)u+=key+':'+p[key]+',';else u=p;var I={mobileInfo:{meaning:'\u6D4F\u89C8\u5668\u4FE1\u606F\uFF1A',msg:H},errorMessage:{meaning:'\u9519\u8BEF\u4FE1\u606F\uFF1A',msg:u},scriptURI:{meaning:'\u51FA\u9519\u6587\u4EF6\uFF1A',msg:q},lineNumber:{meaning:'\u51FA\u9519\u884C\u53F7\uFF1A',msg:r},columnNumber:{meaning:'\u51FA\u9519\u5217\u53F7\uFF1A',msg:s},errorObj:{meaning:'\u9519\u8BEF\u8BE6\u60C5\uFF1A',msg:t}};o._debugHandler('error',v,I)}catch(J){}})}}]),a}();module.exports=new Log;
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Created by Cray on 2016/4/29.
+ */
+var created = false;
+var instance = null;
+
+var Log = function () {
+    function Log() {
+        _classCallCheck(this, Log);
+
+        this.envArray = ['development', 'testing', 'preproduction', 'production'];
+
+        if (!created) {
+            created = true;
+            this._jsErrorHandler();
+            this._jsGetClientIP();
+            instance = new Log();
+        }
+        this.config();
+
+        return instance;
+    }
+
+    _createClass(Log, [{
+        key: 'config',
+        value: function config() {
+            var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                _ref$projectName = _ref.projectName,
+                projectName = _ref$projectName === undefined ? typeof _PROJECTNAME !== 'undefined' && _PROJECTNAME ? _PROJECTNAME : '项目名称未配置' : _ref$projectName,
+                _ref$env = _ref.env,
+                env = _ref$env === undefined ? process.env.NODE_ENV : _ref$env,
+                _ref$level = _ref.level,
+                level = _ref$level === undefined ? 'debug' : _ref$level;
+
+            this.projectName = projectName;
+            this.enable = true;
+            this.typeArray = ['debug', 'log', 'info', 'warn', 'error'];
+            var envIndex = this.envArray.indexOf(env);
+            if (envIndex > -1) {
+                this.env = env;
+            } else {
+                this.enable = false;
+            }
+            var typeIndex = this.typeArray.indexOf(level);
+            if (typeIndex > -1) {
+                this.typeArray = this.typeArray.splice(typeIndex);
+            }
+        }
+    }, {
+        key: 'debug',
+        value: function debug(pageName) {
+            for (var _len = arguments.length, msg = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                msg[_key - 1] = arguments[_key];
+            }
+
+            this._consolePrint('debug', pageName, msg);
+        }
+    }, {
+        key: 'log',
+        value: function log(pageName) {
+            for (var _len2 = arguments.length, msg = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+                msg[_key2 - 1] = arguments[_key2];
+            }
+
+            this._consolePrint('log', pageName, msg);
+        }
+    }, {
+        key: 'info',
+        value: function info(pageName) {
+            for (var _len3 = arguments.length, msg = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+                msg[_key3 - 1] = arguments[_key3];
+            }
+
+            this._consolePrint('info', pageName, msg);
+        }
+    }, {
+        key: 'warn',
+        value: function warn(pageName) {
+            for (var _len4 = arguments.length, msg = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+                msg[_key4 - 1] = arguments[_key4];
+            }
+
+            this._consolePrint('warn', pageName, msg);
+        }
+    }, {
+        key: 'error',
+        value: function error(pageName) {
+            for (var _len5 = arguments.length, msg = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+                msg[_key5 - 1] = arguments[_key5];
+            }
+
+            this._consolePrint('error', pageName, msg);
+        }
+    }, {
+        key: '_ajax',
+        value: function _ajax(url, data) {
+            // 创建ajax对象
+            var xhr = null;
+            if (window.XMLHttpRequest) {
+                xhr = new XMLHttpRequest();
+            } else {
+                xhr = new ActiveXObject('Microsoft.XMLHTTP');
+            }
+            // 用于清除缓存
+            var random = Math.random();
+            if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) == 'object') {
+                var str = '';
+                for (var key in data) {
+                    str += key + '=' + data[key] + '&';
+                }
+                data = str.replace(/&$/, '');
+            }
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send(data);
+        }
+    }, {
+        key: '_consolePrint',
+        value: function _consolePrint(type, pageName, msg) {
+            if (this.enable && this.typeArray.indexOf(type) > -1) {
+                var fn = window.console[type];
+                if (fn) {
+                    fn.apply(window.console, this._formatMsg(type, msg));
+                    this._debugHandler(type, pageName, msg);
+                }
+            }
+        }
+    }, {
+        key: '_debugHandler',
+        value: function _debugHandler(type, pageName, data) {
+            var imgData = this._paramFormat({ "projectName": this.projectName, "type": type,
+                env: this.env, "action": "4001", "pageName": pageName, "logData": data,
+                ipInfo: window.returnCitySN || {} });
+            this._ajax('http://debug.hefantv.com/api/postDebug', imgData);
+        }
+    }, {
+        key: '_getTime',
+        value: function _getTime() {
+            var d = new Date();
+            return String(d.getHours()) + ":" + String(d.getMinutes()) + ":" + String(d.getSeconds());
+        }
+    }, {
+        key: '_paramFormat',
+        value: function _paramFormat(data) {
+            var result = {};
+            result.data = JSON.stringify(data);
+            result.data = encodeURIComponent(result.data);
+            return result;
+        }
+    }, {
+        key: '_formatMsg',
+        value: function _formatMsg(type, msg) {
+            msg.unshift(this._getTime() + ' [' + type + '] > ');
+            return msg;
+        }
+    }, {
+        key: '_jsErrorHandler',
+        value: function _jsErrorHandler() {
+            var _this = this;
+            if (typeof window !== 'undefined' && !window.onerror) {
+
+                window.onerror = function (errorMessage, scriptURI, lineNumber, columnNumber, errorObj) {
+                    var message = {};
+                    var htmlURI = window.location.host + window.location.pathname;
+
+                    try {
+                        var _window$navigator = window.navigator,
+                            appCodeName = _window$navigator.appCodeName,
+                            appName = _window$navigator.appName,
+                            appVersion = _window$navigator.appVersion,
+                            cookieEnabled = _window$navigator.cookieEnabled,
+                            languages = _window$navigator.languages,
+                            onLine = _window$navigator.onLine,
+                            platform = _window$navigator.platform,
+                            product = _window$navigator.product,
+                            productSub = _window$navigator.productSub,
+                            userAgent = _window$navigator.userAgent,
+                            vendor = _window$navigator.vendor,
+                            userNavigator = void 0;
+
+
+                        userNavigator = {
+                            appCodeName: appCodeName,
+                            appName: appName,
+                            appVersion: appVersion,
+                            cookieEnabled: cookieEnabled,
+                            languages: languages,
+                            onLine: onLine,
+                            platform: platform,
+                            product: product,
+                            productSub: productSub,
+                            userAgent: userAgent,
+                            vendor: vendor
+                        };
+                        if ((typeof errorMessage === 'undefined' ? 'undefined' : _typeof(errorMessage)) === "object" && errorMessage.toString() === "[object Event]") {
+                            for (key in errorMessage) {
+                                message += key + ':' + errorMessage[key] + ',';
+                            }
+                        } else {
+                            message = errorMessage;
+                        }
+                        var errorInfo = {
+                            mobileInfo: {
+                                meaning: '浏览器信息：',
+                                msg: userNavigator
+                            },
+                            errorMessage: {
+                                meaning: '错误信息：',
+                                msg: message
+                            },
+                            scriptURI: {
+                                meaning: '出错文件：',
+                                msg: scriptURI
+                            },
+                            lineNumber: {
+                                meaning: '出错行号：',
+                                msg: lineNumber
+                            },
+                            columnNumber: {
+                                meaning: '出错列号：',
+                                msg: columnNumber
+                            },
+                            errorObj: {
+                                meaning: '错误详情：',
+                                msg: errorObj
+                            }
+                        };
+                        _this._debugHandler('error', htmlURI, errorInfo);
+                    } catch (err) {}
+                };
+            }
+        }
+    }, {
+        key: '_jsGetClientIP',
+        value: function _jsGetClientIP() {
+            var eleHeader = document.getElementsByTagName('HEAD').item(0);
+            var eleScript = document.createElement("script");
+            eleScript.type = "text/javascript";
+            eleScript.src = "http://h5api.hefantv.com/api/ipaddress?format=js";
+            eleHeader.appendChild(eleScript);
+        }
+    }]);
+
+    return Log;
+}();
+
+module.exports = new Log();
