@@ -5,7 +5,7 @@ let created = false;
 let instance = null;
 class Log {
     constructor() {
-        this.envArray = ['development', 'testing', 'preproduction', 'production'];
+        this.envArray = ['development', 'testing', 'prepare', 'production'];
 
         if (!created) {
             created = true;
@@ -18,75 +18,65 @@ class Log {
         return instance
     }
 
-    config({ projectName = typeof _PROJECTNAME !== 'undefined' && _PROJECTNAME ? _PROJECTNAME : '项目名称未配置', env = process.env.NODE_ENV, level = 'debug' } = {}) {
-        this.projectName = projectName;
-        this.enable = true;
-        this.typeArray = ['debug', 'log', 'info', 'warn', 'error'];
+    config({ pjKey = typeof _PJKEY !== 'undefined' && _PJKEY ? _PJKEY : '0',
+        env = process.env.NODE_ENV, level = 'debug' } = {}) {
+
+        this.pjKey = pjKey
+        this.env = env
+        this.enable = false
+
         let envIndex = this.envArray.indexOf(env);
         if (envIndex > -1) {
-            this.env = env
-        } else {
-            this.enable = false;
-        }
-        let typeIndex = this.typeArray.indexOf(level);
-        if (typeIndex > -1) {
-            this.typeArray = this.typeArray.splice(typeIndex)
-        }
+            this.enable = true
+        } 
 
     }
-    debug(pageName, ...msg) {
-        this._consolePrint('debug', pageName, msg);
+    debug(...msg) {
+        this._consolePrint('log', 0, msg);
     }
 
-    log(pageName, ...msg) {
-        this._consolePrint('log', pageName, msg);
+    log(...msg) {
+        this._consolePrint('log', 1, msg);
     }
 
-    info(pageName, ...msg) {
-        this._consolePrint('info', pageName, msg);
+    info(...msg) {
+        this._consolePrint('info', 2, msg);
     }
 
-    warn(pageName, ...msg) {
-        this._consolePrint('warn', pageName, msg);
+    warn(...msg) {
+        this._consolePrint('warn', 3, msg);
     }
 
-    error(pageName, ...msg) {
-        this._consolePrint('error', pageName, msg);
-    }
-    _ajax(url, data) {
-        // 创建ajax对象
-        var xhr = null;
-        if (window.XMLHttpRequest) {
-            xhr = new XMLHttpRequest();
-        } else {
-            xhr = new ActiveXObject('Microsoft.XMLHTTP')
-        }
-        // 用于清除缓存
-        var random = Math.random();
-        if (typeof data == 'object') {
-            var str = '';
-            for (var key in data) {
-                str += key + '=' + data[key] + '&';
-            }
-            data = str.replace(/&$/, '');
-        }
-        xhr.open('POST', url, true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.send(data);
-    }
-    _consolePrint(type, pageName, msg) {
-        if (this.enable && this.typeArray.indexOf(type) > -1) {
-            const fn = window.console[type];
-            if (fn) {
-                fn.apply(window.console, this._formatMsg(type, msg));
-                this._debugHandler(type, pageName, msg)
-            }
-        }
+    error(...msg) {
+        this._consolePrint('error', 4, msg);
     }
     
-    _debugHandler(type, pageName, data) {
-        let imgData = this._paramFormat({ "projectName": this.projectName, "type": type, 
-            env: this.env, "action": "4001", "pageName": pageName, "logData": data,
+    /**
+    * 打印输出
+    **/
+    _consolePrint(type, level, msg) {
+        const fn = window.console[type];
+        if (fn) {
+            fn.apply(window.console, this._formatMsg(type, msg))
+
+            if(this.enable){
+                if(this.env == 'production'){
+                    if(level > 0){
+                        this._debugHandler(type, msg)
+                    }
+                }else{
+                    this._debugHandler(type, msg)
+                }
+            }  
+            
+        }
+    }
+    /**
+    * 输出到debug系统
+    **/
+    _debugHandler(type, msg) {
+        let imgData = this._paramFormat({"pjKey":this.pjKey, "type": type, server: "",
+            env: this.env, "action": "4001", "url": window.location.href, "logData": msg,
             ipInfo: window.returnCitySN || {} });
         this._ajax('http://debug.hefantv.com/api/postDebug', imgData);
     }
@@ -104,6 +94,9 @@ class Log {
         msg.unshift(this._getTime() + ' [' + type + '] > ');
         return msg;
     }
+    /**
+    * 页面error监听
+    **/
     _jsErrorHandler() {
         let _this = this;
         if (typeof window !== 'undefined' && !window.onerror) {
@@ -173,7 +166,7 @@ class Log {
                             msg: errorObj
                         }
                     }
-                    _this._debugHandler('error', htmlURI, errorInfo)
+                    _this._debugHandler('error', [errorInfo])
                 } catch (err) {
 
                 }
@@ -181,13 +174,38 @@ class Log {
             }
         }
     }
-
+    
+    /**
+    * 客户端打入ip获取js
+    **/
     _jsGetClientIP(){
         let eleHeader = document.getElementsByTagName('HEAD').item(0)
         let eleScript= document.createElement("script") 
         eleScript.type = "text/javascript"
         eleScript.src="http://h5api.hefantv.com/api/ipaddress?format=js" 
         eleHeader.appendChild( eleScript)
+    }
+
+    _ajax(url, data) {
+        // 创建ajax对象
+        var xhr = null;
+        if (window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+        } else {
+            xhr = new ActiveXObject('Microsoft.XMLHTTP')
+        }
+        // 用于清除缓存
+        var random = Math.random();
+        if (typeof data == 'object') {
+            var str = '';
+            for (var key in data) {
+                str += key + '=' + data[key] + '&';
+            }
+            data = str.replace(/&$/, '');
+        }
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send(data);
     }
 }
 
