@@ -12,9 +12,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var created = false;
 var instance = null;
 
-var Log = function () {
-    function Log() {
-        _classCallCheck(this, Log);
+var HefanLog = function () {
+    function HefanLog() {
+        _classCallCheck(this, HefanLog);
 
         this.envArray = ['development', 'testing', 'prepare', 'production'];
 
@@ -22,24 +22,18 @@ var Log = function () {
             created = true;
             this._jsErrorHandler();
             this._jsGetClientIP();
-            instance = new Log();
+            instance = new HefanLog();
         }
         this.config();
 
         return instance;
     }
 
-    _createClass(Log, [{
+    _createClass(HefanLog, [{
         key: 'config',
         value: function config() {
-            var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                _ref$pjKey = _ref.pjKey,
-                pjKey = _ref$pjKey === undefined ? typeof _PJKEY !== 'undefined' && _PJKEY ? _PJKEY : '0' : _ref$pjKey,
-                _ref$env = _ref.env,
-                env = _ref$env === undefined ? process.env.NODE_ENV : _ref$env;
-
-            this.pjKey = pjKey;
-            this.env = env;
+            this.pjKey = _PJKEY || '0';
+            this.env = process.env.NODE_ENV;
             this.enable = false;
 
             var envIndex = this.envArray.indexOf(env);
@@ -267,7 +261,7 @@ var Log = function () {
         }
     }]);
 
-    return Log;
+    return HefanLog;
 }();
 
-module.exports = new Log();
+module.exports = new HefanLog();
