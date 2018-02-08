@@ -9,8 +9,8 @@ class Log {
 
         if (!created) {
             created = true;
-            this._jsErrorHandler()
             this._jsGetClientIP()
+            this._jsErrorHandler()           
             instance = new Log();
         }
         this.config()
@@ -75,10 +75,25 @@ class Log {
     * 输出到debug系统
     **/
     _debugHandler(type, msg) {
-        let imgData = this._paramFormat({"pjKey":this.pjKey, "type": type, server: "",
+        let _this = this
+        let sourceData = {"pjKey":this.pjKey, "type": type, server: "",
             env: this.env, "action": "4001", "url": window.location.href, "logData": msg,
-            ipInfo: window.returnCitySN || {} });
-        this._ajax('http://debug.hefantv.com/api/postDebug', imgData);
+            ipInfo: window.returnCitySN }
+        let imgData = this._paramFormat(sourceData)
+        if(window.returnCitySN){
+            this._ajax('http://debug.hefantv.com/api/postDebug', imgData, 'POST');
+        }else{
+            this._ajax('http://h5api.hefantv.com/api/ipaddress').then(function(data){
+                try{
+                    sourceData.ipInfo = JSON.parse(data)
+                }catch(e){
+                    sourceData.ipInfo = {}
+                }
+                imgData = _this._paramFormat(sourceData)
+                _this._ajax('http://debug.hefantv.com/api/postDebug', imgData, 'POST');
+         })
+        }       
+        
     }
     _getTime() {
         let d = new Date();
@@ -186,7 +201,7 @@ class Log {
         eleHeader.appendChild( eleScript)
     }
 
-    _ajax(url, data) {
+    _ajax(url, data, method='GET') {
         // 创建ajax对象
         var xhr = null;
         if (window.XMLHttpRequest) {
@@ -203,9 +218,25 @@ class Log {
             }
             data = str.replace(/&$/, '');
         }
-        xhr.open('POST', url, true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.send(data);
+        return new Promise((resolve, reject)=>{
+            xhr.onreadystatechange=function()
+            {
+                if (xhr.readyState==4 && xhr.status==200)
+                {
+                    resolve(xhr.responseText)
+                }
+            }
+
+            if(method == 'POST'){
+                xhr.open('POST', url, true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send(data);
+            }else{
+                xhr.open('GET', url, true);
+                xhr.send();
+            }  
+        })
+            
     }
 }
 
