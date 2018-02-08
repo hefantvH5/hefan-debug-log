@@ -19,7 +19,7 @@ class Log {
     }
 
     config({ pjKey = typeof _PJKEY !== 'undefined' && _PJKEY ? _PJKEY : '0',
-        env = process.env.NODE_ENV, level = 'debug' } = {}) {
+        env = process.env.NODE_ENV}={}) {
 
         this.pjKey = pjKey
         this.env = env
@@ -174,7 +174,7 @@ class Log {
             }
         }
     }
-    
+
     /**
     * 客户端打入ip获取js
     **/

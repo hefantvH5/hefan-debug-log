@@ -36,9 +36,7 @@ var Log = function () {
                 _ref$pjKey = _ref.pjKey,
                 pjKey = _ref$pjKey === undefined ? typeof _PJKEY !== 'undefined' && _PJKEY ? _PJKEY : '0' : _ref$pjKey,
                 _ref$env = _ref.env,
-                env = _ref$env === undefined ? process.env.NODE_ENV : _ref$env,
-                _ref$level = _ref.level,
-                level = _ref$level === undefined ? 'debug' : _ref$level;
+                env = _ref$env === undefined ? process.env.NODE_ENV : _ref$env;
 
             this.pjKey = pjKey;
             this.env = env;
