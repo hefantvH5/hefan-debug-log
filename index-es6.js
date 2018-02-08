@@ -18,10 +18,10 @@ class Log {
         return instance
     }
 
-    config({ pjKey = typeof _PJKEY !== 'undefined' && _PJKEY ? _PJKEY : '0',
+    config({ pjKey = typeof _PJKEY !== 'undefined' && _PJKEY ? _PJKEY : {'key':'0'},
         env = process.env.NODE_ENV}={}) {
 
-        this.pjKey = pjKey
+        this.pjKey = pjKey.key
         this.env = env
         this.enable = false
 
