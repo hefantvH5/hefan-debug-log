@@ -58,12 +58,71 @@ class Log {
         const fn = window.console[type];
         if (fn) {           
             if(this.enable){
+                let logData = msg
+                if(level == 4){
+                    let {
+                        appCodeName,
+                        appName,
+                        appVersion,
+                        cookieEnabled,
+                        languages,
+                        onLine,
+                        platform,
+                        product,
+                        productSub,
+                        userAgent,
+                        vendor
+                    } = window.navigator, userNavigator;
+
+                    userNavigator = {
+                        appCodeName,
+                        appName,
+                        appVersion,
+                        cookieEnabled,
+                        languages,
+                        onLine,
+                        platform,
+                        product,
+                        productSub,
+                        userAgent,
+                        vendor
+                    }
+
+                    let errorInfo = {
+                        mobileInfo: {
+                            meaning: '浏览器信息：',
+                            msg: userNavigator
+                        },
+                        scriptURI: {
+                                meaning: '出错文件：',
+                                msg: ''
+                        },
+                            lineNumber: {
+                                meaning: '出错行号：',
+                                msg: 0
+                            },
+                            columnNumber: {
+                                meaning: '出错列号：',
+                                msg: 0
+                            },
+                        errorObj: {
+                                meaning: '堆栈信息：',
+                                msg: ''
+                            },
+                        errorMessage: {
+                            meaning: '错误信息：',
+                            msg: msg.toString()
+                        }
+                    }
+
+                    logData = [errorInfo]
+                }
                 if(this.env == 'production'){
                     if(level > 0){
-                        this._debugHandler(type, msg)
+                        this._debugHandler(type, logData)
                     }
                 }else{
-                    this._debugHandler(type, msg)
+                    this._debugHandler(type, logData)
                 }
             }  
             fn.apply(window.console, this._formatMsg(type, msg))

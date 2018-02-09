@@ -103,12 +103,72 @@ var Log = function () {
             var fn = window.console[type];
             if (fn) {
                 if (this.enable) {
+                    var logData = msg;
+                    if (level == 4) {
+                        var _window$navigator = window.navigator,
+                            appCodeName = _window$navigator.appCodeName,
+                            appName = _window$navigator.appName,
+                            appVersion = _window$navigator.appVersion,
+                            cookieEnabled = _window$navigator.cookieEnabled,
+                            languages = _window$navigator.languages,
+                            onLine = _window$navigator.onLine,
+                            platform = _window$navigator.platform,
+                            product = _window$navigator.product,
+                            productSub = _window$navigator.productSub,
+                            userAgent = _window$navigator.userAgent,
+                            vendor = _window$navigator.vendor,
+                            userNavigator = void 0;
+
+
+                        userNavigator = {
+                            appCodeName: appCodeName,
+                            appName: appName,
+                            appVersion: appVersion,
+                            cookieEnabled: cookieEnabled,
+                            languages: languages,
+                            onLine: onLine,
+                            platform: platform,
+                            product: product,
+                            productSub: productSub,
+                            userAgent: userAgent,
+                            vendor: vendor
+                        };
+
+                        var errorInfo = {
+                            mobileInfo: {
+                                meaning: '浏览器信息：',
+                                msg: userNavigator
+                            },
+                            scriptURI: {
+                                meaning: '出错文件：',
+                                msg: ''
+                            },
+                            lineNumber: {
+                                meaning: '出错行号：',
+                                msg: 0
+                            },
+                            columnNumber: {
+                                meaning: '出错列号：',
+                                msg: 0
+                            },
+                            errorObj: {
+                                meaning: '堆栈信息：',
+                                msg: ''
+                            },
+                            errorMessage: {
+                                meaning: '错误信息：',
+                                msg: msg.toString()
+                            }
+                        };
+
+                        logData = [errorInfo];
+                    }
                     if (this.env == 'production') {
                         if (level > 0) {
-                            this._debugHandler(type, msg);
+                            this._debugHandler(type, logData);
                         }
                     } else {
-                        this._debugHandler(type, msg);
+                        this._debugHandler(type, logData);
                     }
                 }
                 fn.apply(window.console, this._formatMsg(type, msg));
@@ -179,18 +239,18 @@ var Log = function () {
                     var htmlURI = window.location.host + window.location.pathname;
 
                     try {
-                        var _window$navigator = window.navigator,
-                            appCodeName = _window$navigator.appCodeName,
-                            appName = _window$navigator.appName,
-                            appVersion = _window$navigator.appVersion,
-                            cookieEnabled = _window$navigator.cookieEnabled,
-                            languages = _window$navigator.languages,
-                            onLine = _window$navigator.onLine,
-                            platform = _window$navigator.platform,
-                            product = _window$navigator.product,
-                            productSub = _window$navigator.productSub,
-                            userAgent = _window$navigator.userAgent,
-                            vendor = _window$navigator.vendor,
+                        var _window$navigator2 = window.navigator,
+                            appCodeName = _window$navigator2.appCodeName,
+                            appName = _window$navigator2.appName,
+                            appVersion = _window$navigator2.appVersion,
+                            cookieEnabled = _window$navigator2.cookieEnabled,
+                            languages = _window$navigator2.languages,
+                            onLine = _window$navigator2.onLine,
+                            platform = _window$navigator2.platform,
+                            product = _window$navigator2.product,
+                            productSub = _window$navigator2.productSub,
+                            userAgent = _window$navigator2.userAgent,
+                            vendor = _window$navigator2.vendor,
                             userNavigator = void 0;
 
 
