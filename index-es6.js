@@ -56,9 +56,7 @@ class Log {
     **/
     _consolePrint(type, level, msg) {
         const fn = window.console[type];
-        if (fn) {
-            fn.apply(window.console, this._formatMsg(type, msg))
-
+        if (fn) {           
             if(this.enable){
                 if(this.env == 'production'){
                     if(level > 0){
@@ -68,7 +66,7 @@ class Log {
                     this._debugHandler(type, msg)
                 }
             }  
-            
+            fn.apply(window.console, this._formatMsg(type, msg))
         }
     }
     /**
