@@ -102,8 +102,6 @@ var Log = function () {
         value: function _consolePrint(type, level, msg) {
             var fn = window.console[type];
             if (fn) {
-                fn.apply(window.console, this._formatMsg(type, msg));
-
                 if (this.enable) {
                     if (this.env == 'production') {
                         if (level > 0) {
@@ -113,6 +111,7 @@ var Log = function () {
                         this._debugHandler(type, msg);
                     }
                 }
+                fn.apply(window.console, this._formatMsg(type, msg));
             }
         }
         /**
@@ -171,7 +170,11 @@ var Log = function () {
             var _this = this;
             if (typeof window !== 'undefined' && !window.onerror) {
 
-                window.onerror = function (errorMessage, scriptURI, lineNumber, columnNumber, errorObj) {
+                window.onerror = function (errorMessage, scriptURI, lineNumber, columnNumber, error) {
+                    if (!scriptURI) {
+                        return true;
+                    }
+
                     var message = {};
                     var htmlURI = window.location.host + window.location.pathname;
 
@@ -211,33 +214,58 @@ var Log = function () {
                         } else {
                             message = errorMessage;
                         }
-                        var errorInfo = {
-                            mobileInfo: {
-                                meaning: '浏览器信息：',
-                                msg: userNavigator
-                            },
-                            errorMessage: {
-                                meaning: '错误信息：',
-                                msg: message
-                            },
-                            scriptURI: {
-                                meaning: '出错文件：',
-                                msg: scriptURI
-                            },
-                            lineNumber: {
-                                meaning: '出错行号：',
-                                msg: lineNumber
-                            },
-                            columnNumber: {
-                                meaning: '出错列号：',
-                                msg: columnNumber
-                            },
-                            errorObj: {
-                                meaning: '错误详情：',
-                                msg: errorObj
+
+                        setTimeout(function () {
+                            var errorInfo = {
+                                mobileInfo: {
+                                    meaning: '浏览器信息：',
+                                    msg: userNavigator
+                                },
+                                errorMessage: {
+                                    meaning: '错误信息：',
+                                    msg: message
+                                },
+                                scriptURI: {
+                                    meaning: '出错文件：',
+                                    msg: scriptURI
+                                },
+                                lineNumber: {
+                                    meaning: '出错行号：',
+                                    msg: lineNumber
+                                },
+                                columnNumber: {
+                                    meaning: '出错列号：',
+                                    msg: columnNumber || window.event && window.event.errorCharacter || 0
+                                },
+                                errorObj: {
+                                    meaning: '堆栈信息：',
+                                    msg: ''
+                                }
+                            };
+
+                            if (!!error && !!error.stack) {
+                                //如果浏览器有堆栈信息
+                                //直接使用
+                                errorInfo.errorObj.msg = error.stack.toString();
+                            } else if (!!arguments.callee) {
+                                //尝试通过callee拿堆栈信息
+                                var ext = [];
+                                var f = arguments.callee.caller,
+                                    c = 3;
+                                //这里只拿三层堆栈信息
+                                while (f && --c > 0) {
+                                    ext.push(f.toString());
+                                    if (f === f.caller) {
+                                        break; //如果有环
+                                    }
+                                    f = f.caller;
+                                }
+                                ext = ext.join(",");
+                                errorInfo.errorObj.msg = error.stack.toString();
                             }
-                        };
-                        _this._debugHandler('error', [errorInfo]);
+
+                            _this._debugHandler('error', [errorInfo]);
+                        }, 0);
                     } catch (err) {}
                 };
             }
